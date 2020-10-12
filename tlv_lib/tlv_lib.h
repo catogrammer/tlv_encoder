@@ -8,17 +8,15 @@
 
 struct tlv_t 
 {
-    std::uint_fast16_t _tag;
-    std::uint_fast16_t _len;
-    std::basic_string<char16_t> _value;
+    char16_t _tag;
+    char16_t _len;
+    std::u16string _value;
 
-    tlv_t(std::uint_fast16_t t, std::uint_fast16_t l, 
-          const std::basic_string<char16_t>& val)
+    tlv_t(char16_t t, char16_t l, const std::u16string& val)
     {
         _tag = t;
         _len = l;
         _value = val;
-        // std::memcpy(&_value, val.c_str(), val.length()*sizeof(char16_t));
     }
 };
 
