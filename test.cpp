@@ -18,20 +18,21 @@ int main(int argc, char const *argv[])
     // std::cout << tag << std::hex << "   " << (tag & 0x20) << std::endl;
 
     std::uint_fast16_t tag1 = 0;
-    tag1 = std::stoul(s2, nullptr, 16);
+    tag1 = std::stoul(s, nullptr, 16);
     // std::uint_fast16_t tag2 = std::stoul(s2, nullptr, 16);
     // std::cout << tag1 << "   " << tag2 << std::endl;
     // // std::cout << std::hex << ((tag1 << 8) | tag2) << std::endl;
     // std::cout << std::bitset<8>(tag1) << std::endl;
 
-    std::cout << std::bitset<8>(tag1) << std::endl;
-    std::cout << std::bitset<8>(tag1 >> 1) << std::endl;
-    std::cout << std::bitset<8>(tag1 >> 2) << std::endl;
-    std::cout << std::bitset<8>(tag1 >> 3) << std::endl;
-    std::cout << std::bitset<8>(tag1 >> 4) << std::endl;
-    std::cout << std::bitset<8>(tag1 >> 5) << std::endl;
-    std::cout << std::bitset<8>(tag1 >> 6) << std::endl;
-    std::cout << std::bitset<8>(tag1 & 0x7) << std::endl;
+    std::cout << std::bitset<16>(tag1) << std::endl;
+    // std::cout << std::bitset<8>(tag1 >> 1) << std::endl;
+    // std::cout << std::bitset<8>(tag1 >> 2) << std::endl;
+    // std::cout << std::bitset<8>(tag1 >> 3) << std::endl;
+    // std::cout << std::bitset<8>(tag1 >> 4) << std::endl;
+    // std::cout << std::bitset<8>(tag1 >> 5) << std::endl;
+    // std::cout << std::bitset<8>(tag1 >> 6) << std::endl;
+    std::uint_fast16_t tmp = ((tag1 >> 8) & 0x20);
+    std::cout << std::bitset<16>(tmp) << std::endl;
 
     // int len = 0;
     // len = (len << 8) | 10;

@@ -10,20 +10,15 @@ struct tlv_t
 {
     std::uint_fast16_t _tag;
     std::uint_fast16_t _len;
-    char _value[BUFF_SIZE];
+    std::basic_string<char16_t> _value;
 
-    tlv_t(const std::string tag, const std::string len, const std::string val)
-    {
-        _tag = std::stoul(tag, nullptr, 16);
-        _len = std::stoul(len, nullptr, 16);
-        std::memcpy(&_value, val.c_str(), BUFF_SIZE*sizeof(char));
-    }
-
-    tlv_t(std::uint_fast16_t t, std::uint_fast16_t l, const std::string val)
+    tlv_t(std::uint_fast16_t t, std::uint_fast16_t l, 
+          const std::basic_string<char16_t>& val)
     {
         _tag = t;
         _len = l;
-        std::memcpy(&_value, val.c_str(), BUFF_SIZE*sizeof(char));
+        _value = val;
+        // std::memcpy(&_value, val.c_str(), val.length()*sizeof(char16_t));
     }
 };
 
