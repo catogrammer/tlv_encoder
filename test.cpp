@@ -13,7 +13,7 @@ void print_str_as_hex(std::u16string in)
 {
     for (auto &&i : in)
     {
-        std::cout << std::hex << (int)i << ' ';
+        std::cout << std::hex << i << ' ';
     }
     std::cout << std::endl;
 }
