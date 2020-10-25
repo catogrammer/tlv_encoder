@@ -9,14 +9,15 @@ else ()
     set (CMAKE_CXX_STANDARD_REQUIRED ON)
 endif ()
 
-set(ACE_LINK_LIB  "libACE.so")
-set(ACE_INCLUDE_DIRS "/usr/local/include/ace")
+set (ACE_LINK_LIB  "libACE.so")
+set (ACE_INCLUDE_DIRS "/usr/local/include/ace")
 
 include_directories (
     ${ACE_INCLUDE_DIRS}
     "${CMAKE_CURRENT_SOURCE_DIR}/tlv_lib"
     )
-link_directories("/usr/local/lib/ace")
+
+link_directories ("/usr/local/lib/ace")
 
 add_subdirectory (tlv_lib)
 set (TLV_LIB ${TLV_LIB} tlv_lib)

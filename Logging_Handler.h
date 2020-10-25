@@ -18,7 +18,6 @@ public:
         { logging_peer_.set_handle(handle); }
     Logging_Handler(ACE_FILE_IO &log_file, const ACE_SOCK_Stream &logging_peer)
     : log_file_(log_file), logging_peer_(logging_peer) {}
-    // Logging_Handler(const ACE_SOCK_Stream &logging_peer) : logging_peer_ (logging_peer) { log_file_ = nullptr; }
    
     int close() { return logging_peer_.close(); }
     // Receive one log record from a connected client. Returns
@@ -49,8 +48,7 @@ int Logging_Handler::recv_log_record(ACE_Message_Block *&mblk)
     ACE_Message_Block *payload = new ACE_Message_Block(ACE_DEFAULT_CDR_BUFSIZE);
     ACE_CDR::mb_align(payload);     // Align Message Block for a CDR stream.
 
-    volatile int wtf = logging_peer_.recv_n(payload->wr_ptr(), 8);
-    if (wtf == 8) {
+    if (logging_peer_.recv_n(payload->wr_ptr(), 8) == 8) {
         payload->wr_ptr(8);
 
         ACE_InputCDR cdr(payload);  // Reflect addition of 8 bytes.
@@ -80,6 +78,7 @@ int Logging_Handler::write_log_record(ACE_Message_Block *mblk)
 {
     if (log_file_.send_n(mblk) == -1)
         return -1;
+
     if (ACE::debug())
     {
         ACE_InputCDR cdr(mblk->cont());
