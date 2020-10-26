@@ -1,7 +1,15 @@
 project (Server_MT)
 
-set(SOURCES server_multithreaded.cc)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
+
+set(SOURCES server_multithreaded.cc 
+            src/Logging_Server.cc
+            src/Thread_Per_Connection_Logging_Server.cc
+            src/RT_Thread_Per_Connection_Logging_Server.cc
+    )
 
 add_executable (Server_MT ${SOURCES})
 target_link_libraries(Server_MT ${ACE_LINK_LIB})

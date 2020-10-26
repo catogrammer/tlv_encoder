@@ -14,7 +14,7 @@ set (ACE_INCLUDE_DIRS "/usr/local/include/ace")
 set (ACE_LINK_LIBS "/usr/local/lib/ace")
 
 include_directories (
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/General
     ${ACE_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/tlv_lib
     )
