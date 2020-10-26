@@ -39,7 +39,7 @@ int Thread_Per_Connection_Logging_Server::handle_connections()
          == -1)
         return -1;
 
-    delete thread_args;
+    // delete thread_args;
     
     return 0;
 }
@@ -59,7 +59,7 @@ int Thread_Per_Connection_Logging_Server::handle_data(ACE_SOCK_Stream *logging_p
     make_log_file (log_file, logging_peer);  // Client's hostname is used as the logfile name.
     
     logging_peer->disable(ACE_NONBLOCK); // Place the connection into blocking mode.
-    Logging_Handler logging_handler (log_file, *logging_peer);
+    Logging_Handler logging_handler(log_file, *logging_peer);
     ACE_Thread_Manager *mgr = ACE_Thread_Manager::instance();
     ACE_thread_t me = ACE_OS::thr_self();
 

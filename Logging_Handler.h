@@ -48,6 +48,7 @@ int Logging_Handler::recv_log_record(ACE_Message_Block *&mblk)
     ACE_Message_Block *payload = new ACE_Message_Block(ACE_DEFAULT_CDR_BUFSIZE);
     ACE_CDR::mb_align(payload);     // Align Message Block for a CDR stream.
 
+    // ACE_OS::write (ACE_STDOUT, buf, n);
     if (logging_peer_.recv_n(payload->wr_ptr(), 8) == 8) {
         payload->wr_ptr(8);
 
@@ -85,11 +86,13 @@ int Logging_Handler::write_log_record(ACE_Message_Block *mblk)
         ACE_CDR::Boolean byte_order;
         ACE_CDR::ULong length;
         cdr >> ACE_InputCDR::to_boolean(byte_order);
-        cdr.reset_byte_order (byte_order);
+        cdr.reset_byte_order(byte_order);
         cdr >> length;
         ACE_Log_Record log_record;
         cdr >> log_record; // Extract the <ACE_log_record>.
         log_record.print(mblk->rd_ptr(), 1, std::cerr);
+
+        ACE_OS::write(ACE_STDOUT, log_record.msg_data(), log_record.msg_data_len());
     }
     return mblk->total_length();
 }
@@ -102,7 +105,7 @@ int Logging_Handler::log_record()
         return -1;
     else {
         int result = write_log_record(mblk);
-        mblk->release();    // Free up the entire, contents.
+        mblk->release();    // Free up the contents.
 
         return result == -1 ? -1 : 0;
     }

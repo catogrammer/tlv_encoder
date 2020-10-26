@@ -37,7 +37,7 @@ int RT_Thread_Per_Connection_Logging_Server::handle_data(ACE_SOCK_Stream *client
 		ACE_SCOPE_THREAD);
 	ACE_OS::thr_setprio(prio);
 
-	return Thread_Per_Connection_Logging_Server::handle_data (client);
+	return Thread_Per_Connection_Logging_Server::handle_data(client);
 }
 
 #endif // _RT_THREAD_PER_CONNECTION_LOGGING_SERVER_H
