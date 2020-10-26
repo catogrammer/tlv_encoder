@@ -7,7 +7,6 @@
 #include "ace/Log_Msg.h"
 #include "ace/Time_Value.h"
 #include "ace/streams.h"
-#include "Logging_Client.h"
 #include <string>
 
 
@@ -30,9 +29,9 @@ int main(int argc, char const *argv[])
                          1);
     
     ACE_SOCK_Connector connector;
-    Logging_Client logging_client;
+    ACE_SOCK_Stream logging_peer;
 
-    if (connector.connect(logging_client.peer(), server_addr) < 0)
+    if (connector.connect(logging_peer, server_addr) < 0)
         ACE_ERROR_RETURN ((LM_ERROR, "%p\n", "connect()"), 1); // Limit the number of characters read on each record.
     
     cin.width(ACE_Log_Record::MAXLOGMSGLEN);
@@ -40,14 +39,13 @@ int main(int argc, char const *argv[])
     for (;;) {
         std::string user_input;
         getline (cin, user_input, '\n');
-        if (!cin | cin.eof()) 
+        if (!cin | cin.eof())
             break;
 
         ACE_Time_Value now(ACE_OS::gettimeofday());
         ACE_Log_Record log_record(LM_INFO, now, ACE_OS::getpid());
-        log_record.msg_data(user_input.c_str());
 
-        if (logging_client.send(log_record) == -1)
+        if (logging_peer.send_n("uptime\n", 7) == -1)
             ACE_ERROR_RETURN ((LM_ERROR, "%p\n", "logging client.send()"), 1);
     }
 

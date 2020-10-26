@@ -39,40 +39,44 @@ public:
 
 int Logging_Handler::recv_log_record(ACE_Message_Block *&mblk)
 {
-    ACE_INET_Addr peer_addr;
-    logging_peer_.get_remote_addr(peer_addr);
-    mblk = new ACE_Message_Block(MAXHOSTNAMELEN + 1);
-    peer_addr.get_host_name(mblk->wr_ptr(), MAXHOSTNAMELEN);
-    mblk->wr_ptr(strlen(mblk->wr_ptr()) + 1); // Go past name.
+    // ACE_INET_Addr peer_addr;
+    // logging_peer_.get_remote_addr(peer_addr);
+    // mblk = new ACE_Message_Block(MAXHOSTNAMELEN + 1);
+    // peer_addr.get_host_name(mblk->wr_ptr(), MAXHOSTNAMELEN);
+    // mblk->wr_ptr(strlen(mblk->wr_ptr()) + 1); // Go past name.
     
-    ACE_Message_Block *payload = new ACE_Message_Block(ACE_DEFAULT_CDR_BUFSIZE);
-    ACE_CDR::mb_align(payload);     // Align Message Block for a CDR stream.
+    // ACE_Message_Block *payload = new ACE_Message_Block(ACE_DEFAULT_CDR_BUFSIZE);
+    // ACE_CDR::mb_align(payload);     // Align Message Block for a CDR stream.
 
-    // ACE_OS::write (ACE_STDOUT, buf, n);
-    if (logging_peer_.recv_n(payload->wr_ptr(), 8) == 8) {
-        payload->wr_ptr(8);
+    // // ACE_OS::write (ACE_STDOUT, buf, n);
+    // if (logging_peer_.recv_n(payload->wr_ptr(), 8) == 8) {
+    //     payload->wr_ptr(8);
 
-        ACE_InputCDR cdr(payload);  // Reflect addition of 8 bytes.
-        ACE_CDR::Boolean byte_order;
-        // Use helper method to disambiguate booleans from chars.
-        cdr >> ACE_InputCDR::to_boolean(byte_order);
-        cdr.reset_byte_order(byte_order);
-        ACE_CDR::ULong length;
-        cdr >> length;
-        payload->size(length + 8);
+    //     ACE_InputCDR cdr(payload);  // Reflect addition of 8 bytes.
+    //     ACE_CDR::Boolean byte_order;
+    //     // Use helper method to disambiguate booleans from chars.
+    //     cdr >> ACE_InputCDR::to_boolean(byte_order);
+    //     cdr.reset_byte_order(byte_order);
+    //     ACE_CDR::ULong length;
+    //     cdr >> length;
+    //     payload->size(length + 8);
 
-        if (logging_peer_.recv_n(payload->wr_ptr(), length) > 0) {
-            payload->wr_ptr(length);
-            // Reflect additional bytes.
-            mblk->cont(payload);
-            return length; // Return length of the log record.
-        }
-    }
+    //     if (logging_peer_.recv_n(payload->wr_ptr(), length) > 0) {
+    //         payload->wr_ptr(length);
+    //         // Reflect additional bytes.
+    //         mblk->cont(payload);
+    //         return length; // Return length of the log record.
+    //     }
+    // }
 
-    payload->release();
-    mblk->release();
-    payload = mblk = 0;
-    return -1;
+    // payload->release();
+    // mblk->release();
+    // payload = mblk = 0;
+    // return -1;
+    char buff[20];
+    logging_peer_.recv_n(buff, 20);
+    ACE_OS::write(ACE_STDOUT, buff, strlen(buff));
+    return 0;
 }
 
 int Logging_Handler::write_log_record(ACE_Message_Block *mblk)
@@ -80,20 +84,8 @@ int Logging_Handler::write_log_record(ACE_Message_Block *mblk)
     if (log_file_.send_n(mblk) == -1)
         return -1;
 
-    if (ACE::debug())
-    {
-        ACE_InputCDR cdr(mblk->cont());
-        ACE_CDR::Boolean byte_order;
-        ACE_CDR::ULong length;
-        cdr >> ACE_InputCDR::to_boolean(byte_order);
-        cdr.reset_byte_order(byte_order);
-        cdr >> length;
-        ACE_Log_Record log_record;
-        cdr >> log_record; // Extract the <ACE_log_record>.
-        log_record.print(mblk->rd_ptr(), 1, std::cerr);
+    // ACE_OS::write(ACE_STDOUT, mblk->base(), mblk->length());
 
-        ACE_OS::write(ACE_STDOUT, log_record.msg_data(), log_record.msg_data_len());
-    }
     return mblk->total_length();
 }
 
@@ -104,9 +96,11 @@ int Logging_Handler::log_record()
     if (recv_log_record(mblk) == -1)
         return -1;
     else {
-        int result = write_log_record(mblk);
-        mblk->release();    // Free up the contents.
+        // int result = write_log_record(mblk);
+        // mblk->release();    // Free up the contents.
 
-        return result == -1 ? -1 : 0;
+        // return result == -1 ? -1 : 0;
+
+        return 0;
     }
 }
