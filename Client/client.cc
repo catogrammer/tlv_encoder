@@ -29,15 +29,16 @@ int main(int argc, char const *argv[])
                          1);
     
     ACE_SOCK_Connector connector;
-    ACE_SOCK_Stream logging_peer;
+    ACE_SOCK_Stream server_peer;
 
-    if (connector.connect(logging_peer, server_addr) < 0)
+    if (connector.connect(server_peer, server_addr) < 0)
         ACE_ERROR_RETURN ((LM_ERROR, "%p\n", "connect()"), 1); // Limit the number of characters read on each record.
     
     cin.width(ACE_Log_Record::MAXLOGMSGLEN);
 
     for (;;) {
         std::string user_input;
+        std::cout << "Enter input string :" << std::endl;
         getline (cin, user_input, '\n');
         if (!cin | cin.eof())
             break;
@@ -45,7 +46,14 @@ int main(int argc, char const *argv[])
         ACE_Time_Value now(ACE_OS::gettimeofday());
         ACE_Log_Record log_record(LM_INFO, now, ACE_OS::getpid());
 
-        if (logging_peer.send_n("uptime\n", 7) == -1)
+        int len = user_input.length();
+        const char* buff = user_input.c_str();
+        iovec send[1];
+        send[0].iov_base = const_cast<ACE_TCHAR*>(buff);;
+        send[0].iov_len = len;
+
+
+        if (server_peer.sendv(send, 1) == -1)
             ACE_ERROR_RETURN ((LM_ERROR, "%p\n", "logging client.send()"), 1);
     }
 

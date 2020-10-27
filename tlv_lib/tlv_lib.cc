@@ -123,7 +123,7 @@ void tlvs_decode(std::u16string data,
     }
 
     value = data.substr(pos + 1, len);
-    right = data.substr(len + offset, data.length() -(len + offset));
+    right = data.substr(len + offset, data.length() - (len + offset));
     left = data.substr(offset, len);
 
     if(tag_is_complex(tag))

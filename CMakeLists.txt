@@ -19,14 +19,17 @@ include_directories (
     ${CMAKE_CURRENT_SOURCE_DIR}/tlv_lib
     )
 
-link_directories (${ACE_LINK_LIBS})
+link_directories (
+    ${ACE_LINK_LIBS}
+    )
 
 add_subdirectory (tlv_lib)
+set (TLV_LIB ${TLV_LIB} tlv_lib)
+
 add_subdirectory (Client)
 add_subdirectory (Server)
 
-set (TLV_LIB tlv_lib)
-
 add_executable (Test_tlv test_tlv_lib.cc)
 target_link_libraries (Test_tlv ${TLV_LIB})
+
 

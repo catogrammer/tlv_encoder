@@ -8,8 +8,7 @@ include_directories(
 set(SOURCES server_multithreaded.cc 
             src/Logging_Server.cc
             src/Thread_Per_Connection_Logging_Server.cc
-            src/RT_Thread_Per_Connection_Logging_Server.cc
     )
 
 add_executable (Server_MT ${SOURCES})
-target_link_libraries(Server_MT ${ACE_LINK_LIB})
+target_link_libraries(Server_MT ${ACE_LINK_LIB} ${TLV_LIB})
